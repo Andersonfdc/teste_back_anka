@@ -1,0 +1,813 @@
+{
+  "collection": {
+    "item": [
+      {
+        "id": "b3e453c0-a5e0-4e0b-b84e-d88a388ae3ab",
+        "name": "Bootstrap",
+        "item": [
+          {
+            "id": "000c9f20-f753-4781-9373-e20bc0336c58",
+            "name": "Health - GET /api/v1/health",
+            "request": {
+              "url": {
+                "path": [
+                  "api",
+                  "v1",
+                  "health"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "GET"
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "e0a74b49-921b-4c44-84ef-d83ccae73123",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test('status code is 200', function () {",
+                    "  pm.response.to.have.status(200);",
+                    "});",
+                    "const body = pm.response.json();",
+                    "pm.test('health status true', function () {",
+                    "  pm.expect(body.status).to.eql(true);",
+                    "});"
+                  ],
+                  "_lastExecutionId": "30f49023-25bc-4926-93dd-e0d18c0e1841"
+                }
+              }
+            ]
+          },
+          {
+            "id": "f1660076-fa49-4ea6-b7a8-382622bf472c",
+            "name": "Auth Login - POST /api/v1/auth/login",
+            "request": {
+              "url": {
+                "path": [
+                  "api",
+                  "v1",
+                  "auth",
+                  "login"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{apiKey}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"email\": \"{{testUserEmail}}\",\n  \"password\": \"{{testUserPassword}}\"\n}"
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "85a83fb7-b215-4715-a2e4-5a3fb7ea3975",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test('status code is 200', function () {",
+                    "  pm.response.to.have.status(200);",
+                    "});",
+                    "const body = pm.response.json();",
+                    "pm.test('challengeId returned', function () {",
+                    "  pm.expect(body.challengeId).to.be.ok;",
+                    "});",
+                    "pm.environment.set('challengeId', body.challengeId);"
+                  ],
+                  "_lastExecutionId": "2b5cc288-8ee5-471a-aaa5-405a6d2a00b5"
+                }
+              }
+            ]
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "12277315-0cd5-492a-a0be-3ae6a49c08c8",
+        "name": "AuthFlow",
+        "item": [
+          {
+            "id": "88868e00-aa98-4127-8658-a5795451e538",
+            "name": "OTP Verify - POST /api/v1/auth/otp/verify",
+            "request": {
+              "url": {
+                "path": [
+                  "api",
+                  "v1",
+                  "auth",
+                  "otp",
+                  "verify"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "x-api-key",
+                  "value": "{{apiKey}}"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"challengeId\": {{challengeId}},\n  \"code\": \"{{otpCode}}\",\n  \"rememberMe\": false\n}"
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "dba78c25-cad7-4f91-b025-1cc5840a8e0e",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test('status code is 200', function () {",
+                    "  pm.response.to.have.status(200);",
+                    "});",
+                    "const body = pm.response.json();",
+                    "pm.test('access token is returned', function () {",
+                    "  pm.expect(body.accessToken).to.be.a('string').and.not.empty;",
+                    "});",
+                    "pm.environment.set('accessToken', body.accessToken);"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "435b73b5-0193-4a9f-a64d-36f9e31b0344",
+            "name": "Auth Me - GET /api/v1/auth/me",
+            "request": {
+              "url": {
+                "path": [
+                  "api",
+                  "v1",
+                  "auth",
+                  "me"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{accessToken}}"
+                }
+              ],
+              "method": "GET"
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "c338cdfc-ec0d-497b-853d-82756bbc4f3d",
+                  "type": "text/javascript",
+                  "exec": [
+                    "pm.test('status code is 200', function () {",
+                    "  pm.response.to.have.status(200);",
+                    "});",
+                    "const body = pm.response.json();",
+                    "pm.test('returns authenticated user', function () {",
+                    "  pm.expect(body.user).to.be.ok;",
+                    "  pm.expect(body.user.email).to.eql(pm.environment.get('testUserEmail'));",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "event": []
+      }
+    ],
+    "event": [],
+    "variable": [],
+    "info": {
+      "_postman_id": "4f69bc02-a651-49d2-9adc-8499aca2d428",
+      "name": "anka-backend-qa-api",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "description": {
+        "content": "Independent API runtime test collection for Newman.",
+        "type": "text/plain"
+      }
+    }
+  },
+  "environment": {
+    "_": {
+      "postman_variable_scope": "environment",
+      "postman_exported_at": "2026-02-18T00:00:00.000Z",
+      "postman_exported_using": "qa-runtime-tests"
+    },
+    "id": "7ee7ba90-8bb5-4654-b5d6-273dfbdb7f4d",
+    "name": "qa-local",
+    "values": [
+      {
+        "type": "any",
+        "value": "http://backend:3333",
+        "key": "baseUrl"
+      },
+      {
+        "type": "any",
+        "value": "dev-api-key",
+        "key": "apiKey"
+      },
+      {
+        "type": "any",
+        "value": "murilo@ankatech.com.br",
+        "key": "testUserEmail"
+      },
+      {
+        "type": "any",
+        "value": "password",
+        "key": "testUserPassword"
+      },
+      {
+        "type": "any",
+        "value": 1,
+        "key": "challengeId"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "otpCode"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "accessToken"
+      }
+    ]
+  },
+  "globals": {
+    "id": "c6f608fc-abb0-48aa-825e-0ac26d240fc2",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 4,
+        "pending": 0,
+        "failed": 0
+      },
+      "testScripts": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 261,
+      "responseMin": 74,
+      "responseMax": 448,
+      "responseSd": 187,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1771510743187,
+      "completed": 1771510743904
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 2,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "fc2c2420-69aa-43bd-983d-02f586eeb93a",
+          "httpRequestId": "86499172-061d-49e1-bff8-7827be845d10"
+        },
+        "item": {
+          "id": "000c9f20-f753-4781-9373-e20bc0336c58",
+          "name": "Health - GET /api/v1/health",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e0a74b49-921b-4c44-84ef-d83ccae73123",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const body = pm.response.json();",
+                  "pm.test('health status true', function () {",
+                  "  pm.expect(body.status).to.eql(true);",
+                  "});"
+                ],
+                "_lastExecutionId": "30f49023-25bc-4926-93dd-e0d18c0e1841"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "3333",
+            "path": [
+              "api",
+              "v1",
+              "health"
+            ],
+            "host": [
+              "backend"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "583a660b-4245-4511-961c-b9dfc96a9010",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "backend:3333",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "81559034-5979-4fa1-b42d-1e4f9c374d0a",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "content-length",
+              "value": "45"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 19 Feb 2026 14:19:03 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=72"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              116,
+              114,
+              117,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              83,
+              101,
+              114,
+              118,
+              101,
+              114,
+              32,
+              105,
+              115,
+              32,
+              114,
+              117,
+              110,
+              110,
+              105,
+              110,
+              103,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 74,
+          "responseSize": 45
+        },
+        "id": "000c9f20-f753-4781-9373-e20bc0336c58",
+        "assertions": [
+          {
+            "assertion": "status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "health status true",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "80b4ac00-6e6d-4d6b-8270-45a94222f407",
+          "length": 2,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "68e1aaf3-3c99-4b73-8d06-8f3a8c09b7c6"
+        },
+        "item": {
+          "id": "f1660076-fa49-4ea6-b7a8-382622bf472c",
+          "name": "Auth Login - POST /api/v1/auth/login",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "{{apiKey}}"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{testUserEmail}}\",\n  \"password\": \"{{testUserPassword}}\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "85a83fb7-b215-4715-a2e4-5a3fb7ea3975",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const body = pm.response.json();",
+                  "pm.test('challengeId returned', function () {",
+                  "  pm.expect(body.challengeId).to.be.ok;",
+                  "});",
+                  "pm.environment.set('challengeId', body.challengeId);"
+                ],
+                "_lastExecutionId": "2b5cc288-8ee5-471a-aaa5-405a6d2a00b5"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "3333",
+            "path": [
+              "api",
+              "v1",
+              "auth",
+              "login"
+            ],
+            "host": [
+              "backend"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "x-api-key",
+              "value": "dev-api-key"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "1515aeb7-b11a-48dd-bac9-2948fe36e558",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "backend:3333",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "65",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"email\": \"murilo@ankatech.com.br\",\n  \"password\": \"password\"\n}"
+          }
+        },
+        "response": {
+          "id": "12be89cb-e9d8-4237-b3c8-ffbdb9c70de1",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "access-control-allow-origin",
+              "value": "*"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "content-length",
+              "value": "76"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 19 Feb 2026 14:19:03 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=72"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              116,
+              114,
+              117,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              67,
+              195,
+              179,
+              100,
+              105,
+              103,
+              111,
+              32,
+              100,
+              101,
+              32,
+              118,
+              101,
+              114,
+              105,
+              102,
+              105,
+              99,
+              97,
+              195,
+              167,
+              195,
+              163,
+              111,
+              32,
+              101,
+              110,
+              118,
+              105,
+              97,
+              100,
+              111,
+              34,
+              44,
+              34,
+              99,
+              104,
+              97,
+              108,
+              108,
+              101,
+              110,
+              103,
+              101,
+              73,
+              100,
+              34,
+              58,
+              49,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 448,
+          "responseSize": 76
+        },
+        "id": "f1660076-fa49-4ea6-b7a8-382622bf472c",
+        "assertions": [
+          {
+            "assertion": "status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "challengeId returned",
+            "skipped": false
+          }
+        ]
+      }
+    ],
+    "transfers": {
+      "responseTotal": 121
+    },
+    "failures": [],
+    "error": null
+  }
+}

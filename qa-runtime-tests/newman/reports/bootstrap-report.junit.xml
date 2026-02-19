@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="anka-backend-qa-api" tests="2" time="0.522">
+  <testsuite name="Bootstrap / Health - GET /api/v1/health" id="000c9f20-f753-4781-9373-e20bc0336c58" timestamp="2026-02-19T14:19:03.187Z" tests="2" failures="0" errors="0" time="0.074">
+    <testcase name="status code is 200" time="0.074" classname="BootstrapHealthGetApiV1Health"/>
+    <testcase name="health status true" time="0.074" classname="BootstrapHealthGetApiV1Health"/>
+  </testsuite>
+  <testsuite name="Bootstrap / Auth Login - POST /api/v1/auth/login" id="f1660076-fa49-4ea6-b7a8-382622bf472c" timestamp="2026-02-19T14:19:03.187Z" tests="2" failures="0" errors="0" time="0.448">
+    <testcase name="status code is 200" time="0.448" classname="BootstrapAuthLoginPostApiV1AuthLogin"/>
+    <testcase name="challengeId returned" time="0.448" classname="BootstrapAuthLoginPostApiV1AuthLogin"/>
+  </testsuite>
+</testsuites>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="anka-backend-qa-api" tests="2" time="0.196">
+  <testsuite name="AuthFlow / OTP Verify - POST /api/v1/auth/otp/verify" id="39126fd3-75a4-4058-8ad8-50811a9e89d2" timestamp="2026-02-19T14:19:07.601Z" tests="2" failures="0" errors="0" time="0.166">
+    <testcase name="status code is 200" time="0.166" classname="AuthFlowOtpVerifyPostApiV1AuthOtpVerify"/>
+    <testcase name="access token is returned" time="0.166" classname="AuthFlowOtpVerifyPostApiV1AuthOtpVerify"/>
+  </testsuite>
+  <testsuite name="AuthFlow / Auth Me - GET /api/v1/auth/me" id="d5cb2d87-dfbb-437e-97e4-7b583dc348d8" timestamp="2026-02-19T14:19:07.601Z" tests="2" failures="0" errors="0" time="0.030">
+    <testcase name="status code is 200" time="0.030" classname="AuthFlowAuthMeGetApiV1AuthMe"/>
+    <testcase name="returns authenticated user" time="0.030" classname="AuthFlowAuthMeGetApiV1AuthMe"/>
+  </testsuite>
+</testsuites>

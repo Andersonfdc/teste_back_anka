@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - cd qa-runtime-tests
+      - npm install
+  build:
+    commands:
+      - npm run pipeline:local
+
+artifacts:
+  files:
+    - qa-runtime-tests/newman/reports/**/*
+    - qa-runtime-tests/k6/reports/**/*

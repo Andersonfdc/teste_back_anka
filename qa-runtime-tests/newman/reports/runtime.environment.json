@@ -1,0 +1,49 @@
+{
+  "_": {
+    "postman_variable_scope": "environment",
+    "postman_exported_at": "2026-02-18T00:00:00.000Z",
+    "postman_exported_using": "qa-runtime-tests"
+  },
+  "id": "7ee7ba90-8bb5-4654-b5d6-273dfbdb7f4d",
+  "name": "qa-local",
+  "values": [
+    {
+      "type": "any",
+      "value": "http://backend:3333",
+      "key": "baseUrl"
+    },
+    {
+      "type": "any",
+      "value": "dev-api-key",
+      "key": "apiKey"
+    },
+    {
+      "type": "any",
+      "value": "murilo@ankatech.com.br",
+      "key": "testUserEmail"
+    },
+    {
+      "type": "any",
+      "value": "password",
+      "key": "testUserPassword"
+    },
+    {
+      "type": "any",
+      "value": 1,
+      "key": "challengeId"
+    },
+    {
+      "type": "any",
+      "value": "327760",
+      "key": "otpCode"
+    },
+    {
+      "type": "any",
+      "value": "",
+      "key": "accessToken"
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2026-02-19T14:19:05.558Z",
+  "_postman_exported_using": "Newman/6.2.2"
+}

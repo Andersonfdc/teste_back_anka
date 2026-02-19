@@ -1,0 +1,27 @@
+{
+  "name": "qa-runtime-tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "up": "docker compose -f docker/compose.qa.yml --env-file docker/.env.example up -d --build postgres redis localstack backend",
+    "up:infra": "docker compose -f docker/compose.qa.yml --env-file docker/.env.example up -d postgres redis localstack",
+    "up:backend": "docker compose -f docker/compose.qa.yml --env-file docker/.env.example up -d --build backend",
+    "down": "docker compose -f docker/compose.qa.yml --env-file docker/.env.example down -v",
+    "seed": "docker compose -f docker/compose.qa.yml --env-file docker/.env.example run --rm migrate-seed",
+    "init:s3": "docker compose -f docker/compose.qa.yml --env-file docker/.env.example run --rm init-s3",
+    "api:test:only": "docker compose -f docker/compose.qa.yml --env-file docker/.env.example run --rm qa-runner node scripts/run-newman.mjs",
+    "api:test": "npm run up:infra && npm run seed && npm run init:s3 && npm run up:backend && npm run api:test:only",
+    "perf:smoke": "docker compose -f docker/compose.qa.yml --env-file docker/.env.example run --rm k6-runner run --summary-trend-stats avg,min,med,max,p(90),p(95),p(99) --summary-export /work/k6/reports/smoke-summary.json /work/k6/scenarios/smoke.js",
+    "perf:load": "docker compose -f docker/compose.qa.yml --env-file docker/.env.example run --rm k6-runner run --summary-trend-stats avg,min,med,max,p(90),p(95),p(99) --summary-export /work/k6/reports/load-summary.json /work/k6/scenarios/load.js",
+    "perf:stress": "docker compose -f docker/compose.qa.yml --env-file docker/.env.example run --rm k6-runner run --summary-trend-stats avg,min,med,max,p(90),p(95),p(99) --summary-export /work/k6/reports/stress-summary.json /work/k6/scenarios/stress.js",
+    "pipeline:local": "node scripts/run-pipeline-local.mjs",
+    "reports:k6": "node scripts/generate-k6-evidence.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "newman": "^6.2.1",
+    "newman-reporter-htmlextra": "^1.23.1",
+    "pg": "^8.16.3"
+  }
+}

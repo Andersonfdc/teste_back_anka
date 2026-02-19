@@ -1,0 +1,40 @@
+name: qa-runtime-tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  qa-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install QA dependencies
+        working-directory: qa-runtime-tests
+        run: npm install
+
+      - name: Run local QA pipeline
+        working-directory: qa-runtime-tests
+        run: npm run pipeline:local
+
+      - name: Upload Newman reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-reports
+          path: qa-runtime-tests/newman/reports
+
+      - name: Upload k6 reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-reports
+          path: qa-runtime-tests/k6/reports

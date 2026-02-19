@@ -1,0 +1,10 @@
+FROM node:22-alpine
+
+WORKDIR /work
+
+COPY qa-runtime-tests/package.json ./package.json
+RUN npm install
+
+COPY qa-runtime-tests/ ./
+
+CMD ["node", "scripts/run-newman.mjs"]
