@@ -1,0 +1,36 @@
+// ENUMS
+enum VerificationCodeType {
+  LOGIN
+  PASSWORD_RESET
+}
+
+// MODELS
+model VerificationCode {
+  id        Int                  @id @default(autoincrement())
+  userId    String               @map("user_id")
+  type      VerificationCodeType
+  code      String
+  expiresAt DateTime             @map("expires_at")
+  consumed  Boolean              @default(false)
+  attempts  Int                  @default(0)
+  createdAt DateTime             @default(now()) @map("created_at")
+  updatedAt DateTime             @updatedAt @map("updated_at")
+
+  user User @relation("UserVerificationCodes", fields: [userId], references: [id])
+
+  @@index([code, type])
+  @@map("verification_codes")
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation("UserPasswordResetTokens", fields: [userId], references: [id])
+
+  @@map("password_reset_tokens")
+}
